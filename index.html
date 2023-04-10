@@ -9,10 +9,22 @@
 <style>
 body { margin: 0; padding: 0; }
 #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+.inset-map {
+  position: absolute;
+  top: 10px;
+  right: 100px;
+  width: 550px;
+  height: 550px;
+  z-index: 1;
+  border: 3px solid #ccc;
+  border-radius: 5px;
+}
 </style>
 </head>
 <body>
+
 <div id="map"></div>
+<div id="inset-map" class="inset-map"></div>
 
 <script>
 	// TO MAKE THE MAP APPEAR YOU MUST
@@ -31,8 +43,31 @@ body { margin: 0; padding: 0; }
         cooperativeGestures: true
     });
 
+    //inset map const
+    const insetMap = new mapboxgl.Map({
+        container: 'inset-map',
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        center: [-87.4603, 35.7245],
+        zoom: 12,
+        bearing: 0,
+        pitch: 0,
+        interactive: false,
+    });
+
+    new mapboxgl.Marker().setLngLat([-87.4603, 35.7245]).addTo(insetMap);
+
+    map.on('move', () => {
+        const { lng, lat } = map.getCenter();
+        const bearing = map.getBearing();
+        insetMap.setCenter([lng, lat]);
+        insetMap.setBearing(bearing);
+    });
+
+
+
+
     // Add zoom and rotation controls to the map.
-    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.NavigationControl())
 
     var bdbm_boundary = {
         "type": "FeatureCollection",
@@ -9724,6 +9759,30 @@ body { margin: 0; padding: 0; }
             ]
             };
 
+    var pointLocations = [
+        { coordinates: [-87.4405, 35.7127], image: 'https://www.looper.com/img/gallery/the-office-funniest-moments-ranked/intro-1627657460.jpg' },
+        { coordinates: [-87.4504, 35.7130], image: 'http://cdn.pastemagazine.com/www/articles/MikeScott.jpg' },
+        { coordinates: [-87.4327, 35.7137], image: 'https://cdn.mos.cms.futurecdn.net/pcBwJqRtu5xUj34AdvHU7o-320-80.jpg' },
+        ];
+    // Create a source for the marker data
+    var markerSource = {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: pointLocations.map(location => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: location.coordinates
+          },
+          properties: {
+            image: location.image
+          }
+        }))
+      }
+    };
+
+    
     map.on('style.load', () => {
         map.setFog({}); // Set the default atmosphere style
 
@@ -9779,6 +9838,139 @@ body { margin: 0; padding: 0; }
         'line-color': 'purple',
         'line-width': 1.5
         }
+        });
+
+        map.addSource('source4', {
+        type: 'geojson',
+        data: mossspring
+        });
+
+        map.addLayer({
+        type: 'line',
+        source: 'source3',
+        id: 'layer4',
+        paint: {
+        'line-color': 'purple',
+        'line-width': 1.5
+        }
+        });
+
+        map.addSource('markers', markerSource);
+
+        map.addLayer({
+            id: 'markers',
+            type: 'point',
+            source: 'markers',
+            layout: {
+            'icon-image': '{image}',
+            'icon-allow-overlap': true
+            },
+            'paint': {
+                'fill-color': 'pink'
+            }
+        });
+
+        // Add click event listeners to the marker layer
+        map.on('click', 'markers', function(e) {
+            var image = e.features[0].properties.image;
+            console.log('Clicked on marker with image ' + image);
+            // Do something with the clicked image, such as opening it in a modal
+        });
+    });
+
+    //map on load for inset map: 
+    insetMap.on('style.load', () => {
+        insetMap.setFog({}); // Set the default atmosphere style
+
+        // Add terrain
+        insetMap.addSource('mapbox-dem', {
+            'type': 'raster-dem',
+            'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+            'tileSize': 512,
+            'maxzoom': 14
+        });
+        insetMap.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+
+        insetMap.addSource('source1', {
+        type: 'geojson',
+        data: bdbm_boundary
+        });
+        // add a line layer without line-dasharray defined to fill the gaps in the dashed line
+        insetMap.addLayer({
+        type: 'line',
+        source: 'source1',
+        id: 'layer1',
+        paint: {
+        'line-color': 'yellow',
+        'line-width': 3
+        }
+        });
+        
+        insetMap.addSource('source2', {
+        type: 'geojson',
+        data: hawbranch
+        });
+
+        insetMap.addLayer({
+        type: 'line',
+        source: 'source2',
+        id: 'layer2',
+        paint: {
+        'line-color': 'blue',
+        'line-width': 1.5
+        }
+        });
+
+        insetMap.addSource('source3', {
+        type: 'geojson',
+        data: mossspring
+        });
+
+        insetMap.addLayer({
+        type: 'line',
+        source: 'source3',
+        id: 'layer3',
+        paint: {
+        'line-color': 'purple',
+        'line-width': 1.5
+        }
+        });
+
+        insetMap.addSource('source4', {
+        type: 'geojson',
+        data: mossspring
+        });
+
+        insetMap.addLayer({
+        type: 'line',
+        source: 'source3',
+        id: 'layer4',
+        paint: {
+        'line-color': 'purple',
+        'line-width': 1.5
+        }
+        });
+
+        insetMap.addSource('markers', markerSource);
+
+        insetMap.addLayer({
+            id: 'markers',
+            type: 'point',
+            source: 'markers',
+            layout: {
+            'icon-image': '{image}',
+            'icon-allow-overlap': true
+            },
+            'paint': {
+                'fill-color': 'pink'
+            }
+        });
+
+        // Add click event listeners to the marker layer
+        insetMap.on('click', 'markers', function(e) {
+            var image = e.features[0].properties.image;
+            console.log('Clicked on marker with image ' + image);
+            // Do something with the clicked image, such as opening it in a modal
         });
     });
 </script>
