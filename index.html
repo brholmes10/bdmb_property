@@ -7,18 +7,22 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
 <style>
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-.inset-map {
-  position: absolute;
-  top: 10px;
-  right: 100px;
-  width: 550px;
-  height: 550px;
-  z-index: 1;
-  border: 3px solid #ccc;
-  border-radius: 5px;
-}
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    .inset-map {
+    position: absolute;
+    top: 10px;
+    right: 100px;
+    width: 550px;
+    height: 550px;
+    z-index: 1;
+    border: 3px solid #ccc;
+    border-radius: 5px;
+    }
+    .mapboxgl-popup {
+    max-width: 800px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
 </style>
 </head>
 <body>
@@ -46,12 +50,14 @@ body { margin: 0; padding: 0; }
     //inset map const
     const insetMap = new mapboxgl.Map({
         container: 'inset-map',
-        style: 'mapbox://styles/mapbox/satellite-v9',
-        center: [-87.4603, 35.7245],
         zoom: 12,
-        bearing: 0,
+        center: [-87.4603, 35.7245],
         pitch: 0,
-        interactive: false,
+        bearing: -177.2,
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        interactive: true,
+        cooperativeGestures: true
     });
 
     new mapboxgl.Marker().setLngLat([-87.4603, 35.7245]).addTo(insetMap);
@@ -9759,29 +9765,125 @@ body { margin: 0; padding: 0; }
             ]
             };
 
-    var pointLocations = [
-        { coordinates: [-87.4405, 35.7127], image: 'https://www.looper.com/img/gallery/the-office-funniest-moments-ranked/intro-1627657460.jpg' },
-        { coordinates: [-87.4504, 35.7130], image: 'http://cdn.pastemagazine.com/www/articles/MikeScott.jpg' },
-        { coordinates: [-87.4327, 35.7137], image: 'https://cdn.mos.cms.futurecdn.net/pcBwJqRtu5xUj34AdvHU7o-320-80.jpg' },
-        ];
-    // Create a source for the marker data
-    var markerSource = {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: pointLocations.map(location => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: location.coordinates
-          },
-          properties: {
-            image: location.image
-          }
-        }))
-      }
-    };
-
+    var geopics = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                "type": "Feature",
+                "id": 1,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.44514929499996,
+                    35.71275243200006
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 1,
+                    "description": '<iframe src="https://giphy.com/embed/l0amJzVHIAfl7jMDos" width="480" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/theoffice-the-office-tv-cafe-disco-l0amJzVHIAfl7jMDos">via GIPHY</a></p>',
+                    "image": "https://media.giphy.com/media/l0amJzVHIAfl7jMDos/giphy.gif"
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 2,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.45441107699997,
+                    35.71252653400006
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 2
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 3,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.45734773899994,
+                    35.734513854000056
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 3
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 4,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.45335688999995,
+                    35.73948359000008
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 4
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 5,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.46103739199998,
+                    35.74874537200003
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 5
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 6,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.46111269099998,
+                    35.70160817400006
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 6
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 7,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.44793535999997,
+                    35.704921332000026
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 7
+                }
+                },
+                {
+                "type": "Feature",
+                "id": 8,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                    -87.43626400899996,
+                    35.71320422600007
+                    ]
+                },
+                "properties": {
+                    "OBJECTID": 8
+                }
+                }
+            ]
+            }
     
     map.on('style.load', () => {
         map.setFog({}); // Set the default atmosphere style
@@ -9793,6 +9895,7 @@ body { margin: 0; padding: 0; }
             'tileSize': 512,
             'maxzoom': 14
         });
+
         map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
 
         map.addSource('source1', {
@@ -9847,7 +9950,7 @@ body { margin: 0; padding: 0; }
 
         map.addLayer({
         type: 'line',
-        source: 'source3',
+        source: 'source4',
         id: 'layer4',
         paint: {
         'line-color': 'purple',
@@ -9855,28 +9958,60 @@ body { margin: 0; padding: 0; }
         }
         });
 
-        map.addSource('markers', markerSource);
+        map.addSource('source5', {
+        type: 'geojson',
+        data: geopics
+        });
 
         map.addLayer({
-            id: 'markers',
-            type: 'point',
-            source: 'markers',
-            layout: {
-            'icon-image': '{image}',
-            'icon-allow-overlap': true
-            },
-            'paint': {
-                'fill-color': 'pink'
-            }
+        type: 'circle',
+        source: 'source5',
+        id: 'layer5',
+        paint: {
+            'circle-color': '#4264fb',
+            'circle-radius': 6,
+            'circle-stroke-width': 2,
+            'circle-stroke-color': '#ffffff'
+        }
         });
 
-        // Add click event listeners to the marker layer
-        map.on('click', 'markers', function(e) {
-            var image = e.features[0].properties.image;
-            console.log('Clicked on marker with image ' + image);
-            // Do something with the clicked image, such as opening it in a modal
+        // When a click event occurs on a feature in the places layer, open a popup at the
+        // location of the feature, with description HTML from its properties.
+        map.on('click', 'layer5', (e) => {
+        // Copy coordinates array.
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        
+        new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(description)
+        .addTo(map);
         });
-    });
+        
+        // Change the cursor to a pointer when the mouse is over the places layer.
+        map.on('mouseenter', 'layer5', () => {
+        map.getCanvas().style.cursor = 'pointer';
+        });
+        
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'layer5', () => {
+        map.getCanvas().style.cursor = '';
+        });
+
+            // Add click event listeners to the marker layer
+            map.on('click', 'markers', function(e) {
+                var image = e.features[0].properties.image;
+                console.log('Clicked on marker with image ' + image);
+                // Do something with the clicked image, such as opening it in a modal
+            });
+        });
 
     //map on load for inset map: 
     insetMap.on('style.load', () => {
@@ -9951,19 +10086,21 @@ body { margin: 0; padding: 0; }
         }
         });
 
-        insetMap.addSource('markers', markerSource);
+        insetMap.addSource('source5', {
+        type: 'geojson',
+        data: geopics
+        });
 
         insetMap.addLayer({
-            id: 'markers',
-            type: 'point',
-            source: 'markers',
-            layout: {
-            'icon-image': '{image}',
-            'icon-allow-overlap': true
-            },
-            'paint': {
-                'fill-color': 'pink'
-            }
+        type: 'circle',
+        source: 'source5',
+        id: 'layer5',
+        paint: {
+            'circle-color': '#4264fb',
+            'circle-radius': 6,
+            'circle-stroke-width': 2,
+            'circle-stroke-color': '#ffffff'
+        }
         });
 
         // Add click event listeners to the marker layer
